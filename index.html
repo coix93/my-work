@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Li Sin · Price List</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --parchment: #f0ebe1;
+    --dust: #e8dfd2;
+    --taupe: #b8a898;
+    --mink: #8c7b6e;
+    --espresso: #3d2e27;
+    --rose: #c4a79a;
+    --rose-light: #ecddd8;
+    --accent: #9b7f72;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--espresso);
+    font-family: 'Noto Serif TC', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 10% 20%, rgba(196,167,154,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 90% 80%, rgba(184,168,152,0.10) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 52px 20px 28px;
+    border-bottom: 1px solid var(--dust);
+  }
+
+  .brand-script {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 10vw, 6rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--taupe);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    opacity: 0.85;
+  }
+
+  .brand-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.65rem, 2vw, 0.8rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--mink);
+    margin-top: 10px;
+  }
+
+  .deco-line {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin: 18px auto 0; max-width: 280px;
+  }
+  .deco-line::before, .deco-line::after {
+    content: ''; flex: 1; height: 1px; background: var(--rose);
+  }
+  .deco-line span { color: var(--rose); font-size: 0.55rem; }
+
+  nav {
+    position: relative; z-index: 1;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0; padding: 28px 16px 0;
+    max-width: 680px; margin: 0 auto;
+  }
+
+  .tab-btn {
+    background: none; border: none;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--taupe);
+    letter-spacing: 0.12em;
+    padding: 10px 18px;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  .tab-btn::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; right: 50%;
+    height: 1.5px; background: var(--accent);
+    transition: left 0.3s, right 0.3s;
+  }
+  .tab-btn:hover { color: var(--espresso); }
+  .tab-btn.active { color: var(--espresso); }
+  .tab-btn.active::after { left: 16px; right: 16px; }
+
+  main {
+    position: relative; z-index: 1;
+    max-width: 680px; margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  .panel { display: none; animation: fadeIn 0.4s ease; }
+  .panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section { margin-top: 44px; }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--espresso);
+    text-align: center;
+    letter-spacing: 0.06em;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--dust);
+    margin-bottom: 20px;
+  }
+  .section-title small {
+    display: block;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    font-style: normal;
+    color: var(--taupe);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+  }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .price-grid.single { grid-template-columns: 1fr; }
+
+  .price-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(184,168,152,0.2);
+    transition: background 0.2s;
+  }
+  .price-grid:not(.single) .price-row:nth-child(odd) {
+    border-right: 1px solid rgba(184,168,152,0.2);
+  }
+  .price-row:hover { background: rgba(236,221,216,0.3); }
+
+  .price-label {
+    font-size: 0.85rem;
+    color: var(--espresso);
+    letter-spacing: 0.05em;
+  }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  .note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--taupe);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border: 1px solid var(--rose-light);
+    border-radius: 2px;
+    background: rgba(236,221,216,0.25);
+  }
+  .note .warn { color: var(--rose); margin-right: 4px; }
+
+  .removal-group { margin-bottom: 20px; }
+  .removal-group-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--taupe);
+    text-align: center;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 24px 20px 36px;
+    border-top: 1px solid var(--dust);
+    font-size: 0.65rem;
+    color: var(--taupe);
+    letter-spacing: 0.15em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-script">Li Sin</div>
+  <p class="brand-sub">price list</p>
+  <div class="deco-line"><span>✦</span></div>
+</header>
+
+<nav>
+  <button class="tab-btn active" data-tab="lash">睫毛嫁接</button>
+  <button class="tab-btn" data-tab="brow">妝感霧眉</button>
+  <button class="tab-btn" data-tab="other">其他服務</button>
+  <button class="tab-btn" data-tab="removal">卸睫</button>
+  <button class="tab-btn" data-tab="addon">加購項目</button>
+</nav>
+
+<main>
+
+  <!-- 睫毛嫁接 -->
+  <div class="panel active" id="tab-lash">
+
+    <div class="section">
+      <div class="section-title">日式單根<small>Japanese Single</small></div>
+      <div class="price-grid">
+        <div class="price-row"><span class="price-label">100 根</span><span class="price-amount">$690</span></div>
+        <div class="price-row"><span class="price-label">120 根</span><span class="price-amount">$790</span></div>
+        <div class="price-row"><span class="price-label">150 根</span><span class="price-amount">$890</span></div>
+        <div class="price-row"><span class="price-label">160 根</span><span class="price-amount">$990</span></div>
+        <div class="price-row"><span class="price-label">180 根</span><span class="price-amount">$1,200</span></div>
+        <div class="price-row"><span class="price-label">200 根</span><span class="price-amount">$1,500</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">人魚編織<small>Mermaid Weave</small></div>
+      <div class="price-grid">
+        <div class="price-row"><span class="price-label">300 根</span><span class="price-amount">$690</span></div>
+        <div class="price-row"><span class="price-label">400 根</span><span class="price-amount">$890</span></div>
+        <div class="price-row"><span class="price-label">500 根</span><span class="price-amount">$1,090</span></div>
+        <div class="price-row" style="visibility:hidden"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">6D 開花<small>6D Bloom</small></div>
+      <div class="price-grid">
+        <div class="price-row"><span class="price-label">300 根</span><span class="price-amount">$890</span></div>
+        <div class="price-row"><span class="price-label">500 根</span><span class="price-amount">$1,190</span></div>
+        <div class="price-row"><span class="price-label">700 根</span><span class="price-amount">$1,490</span></div>
+        <div class="price-row" style="visibility:hidden"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">三葉夾心<small>Clover Sandwich</small></div>
+      <div class="price-grid">
+        <div class="price-row"><span class="price-label">清淡款</span><span class="price-amount">$890</span></div>
+        <div class="price-row"><span class="price-label">小妝感</span><span class="price-amount">$1,000</span></div>
+        <div class="price-row"><span class="price-label">濃密款</span><span class="price-amount">$1,200</span></div>
+        <div class="price-row" style="visibility:hidden"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">三葉草<small>Clover</small></div>
+      <div class="price-grid">
+        <div class="price-row"><span class="price-label">300 根</span><span class="price-amount">$790</span></div>
+        <div class="price-row"><span class="price-label">400 根</span><span class="price-amount">$990</span></div>
+        <div class="price-row"><span class="price-label">500 根</span><span class="price-amount">$1,190</span></div>
+        <div class="price-row" style="visibility:hidden"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 妝感霧眉 -->
+  <div class="panel" id="tab-brow">
+    <div class="section">
+      <div class="section-title">妝感霧眉<small>Misty Brows</small></div>
+      <div class="price-grid single">
+        <div class="price-row"><span class="price-label">手工粉霧眉</span><span class="price-amount">$6,800</span></div>
+        <div class="price-row"><span class="price-label">機器水霧眉</span><span class="price-amount">$8,000</span></div>
+      </div>
+      <p class="note">✦ &nbsp;皆含三個月內補色一次</p>
+    </div>
+  </div>
+
+  <!-- 其他服務 -->
+  <div class="panel" id="tab-other">
+    <div class="section">
+      <div class="section-title">其他服務<small>Other Services</small></div>
+      <div class="price-grid single">
+        <div class="price-row"><span class="price-label">保養式睫毛管理</span><span class="price-amount">$900</span></div>
+        <div class="price-row"><span class="price-label">眉一對除色（單次）</span><span class="price-amount">$2,500</span></div>
+        <div class="price-row"><span class="price-label">眉局部除色（單次）</span><span class="price-amount">$1,000</span></div>
+      </div>
+      <p class="note"><span class="warn">▲</span>除色非一次性療程</p>
+    </div>
+  </div>
+
+  <!-- 卸睫 -->
+  <div class="panel" id="tab-removal">
+    <div class="section">
+      <div class="section-title">卸睫<small>Lash Removal</small></div>
+
+      <div class="removal-group">
+        <p class="removal-group-title">他店嫁接</p>
+        <div class="price-grid single">
+          <div class="price-row"><span class="price-label">卸除，不續接</span><span class="price-amount">$200</span></div>
+          <div class="price-row"><span class="price-label">卸除後，本店續接</span><span class="price-amount">$100</span></div>
+        </div>
+      </div>
+
+      <div class="removal-group">
+        <p class="removal-group-title">本店嫁接</p>
+        <div class="price-grid single">
+          <div class="price-row"><span class="price-label">卸除，不續接</span><span class="price-amount">$100</span></div>
+          <div class="price-row"><span class="price-label">卸除後，本店續接</span><span class="price-amount">免費</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 加購項目 -->
+  <div class="panel" id="tab-addon">
+    <div class="section">
+      <div class="section-title">加購項目<small>Add-ons</small></div>
+      <div class="price-grid single">
+        <div class="price-row">
+          <span class="price-label">下睫毛<br><small style="font-size:0.7rem;color:var(--taupe)">不分款式</small></span>
+          <span class="price-amount">$200</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">根源矯正<br><small style="font-size:0.7rem;color:var(--taupe)">需搭配嫁接</small></span>
+          <span class="price-amount">$200</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">奧黛莉赫本扁毛</span>
+          <span class="price-amount">$200</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © Li Sin &nbsp;·&nbsp; 價格如有異動，以現場公告為準
+</footer>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
